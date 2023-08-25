@@ -108,9 +108,8 @@ yTambien _    _ = False
 
 -- ejercicio 3.3.d
 oBien :: Bool -> Bool -> Bool
-oBien True _    = True
-oBien _    True = True
-oBien _    _    = False
+oBien False b = b
+oBien _     _ = True
 
 -- ejercicio 4.1
 data Persona = P String Int
@@ -140,8 +139,8 @@ esMayorQueLaOtra (P _ e1) (P _ e2) = e1 > e2
 -- ejercicio 4.1.f
 laQueEsMayor :: Persona -> Persona -> Persona
 laQueEsMayor (P n1 e1) (P n2 e2) = if esMayorQueLaOtra (P n1 e1) (P n2 e2)
-                                  then P n1 e1
-                                  else P n2 e2
+                                    then P n1 e1
+                                    else P n2 e2
 
 -- ejercicio 4.2
 data Pokemon = Poke TipoDePokemon Int
@@ -160,10 +159,10 @@ superaA :: Pokemon -> Pokemon -> Bool
 superaA (Poke t1 _) (Poke t2 _) = esMejorTipoQue t1 t2
 
 esMejorTipoQue :: TipoDePokemon -> TipoDePokemon -> Bool
-esMejorTipoQue Agua Fuego   = True
-esMejorTipoQue Fuego Planta = True
-esMejorTipoQue Planta Agua  = True
-esMejorTipoQue _      _     = False
+esMejorTipoQue Agua   Fuego  = True
+esMejorTipoQue Fuego  Planta = True
+esMejorTipoQue Planta Agua   = True
+esMejorTipoQue _      _      = False
 
 -- ejercicio 4.2.b
 cantidadDePokemonDe :: TipoDePokemon -> Entrenador -> Int
@@ -174,7 +173,7 @@ cantidadDelMismoTipo t p1 p2 = unoSi (sonDelMismoTipo t (tipoPokemonDe p1)) + un
 
 unoSi :: Bool -> Int
 unoSi True  = 1
-unoSi False = 0
+unoSi _     = 0
 
 sonDelMismoTipo :: TipoDePokemon -> TipoDePokemon -> Bool
 sonDelMismoTipo Agua   Agua   = True
