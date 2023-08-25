@@ -186,7 +186,7 @@ tipoPokemonDe (Poke t _) = t
 
 -- ejercicio 4.2.c
 juntarPokemon :: (Entrenador, Entrenador) -> [Pokemon]
-juntarPokemon (E _ p1 p2,E _ p3 p4) = [p1, p2, p3, p4]
+juntarPokemon (E _ p1 p2, E _ p3 p4) = [p1, p2, p3, p4]
 
 -- ejercicio 5.1.a
 loMismo :: a -> a
