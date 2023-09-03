@@ -134,6 +134,9 @@ mayoresA n (p : ps) = singularSi p (esMayorA (edad p) n) ++ mayoresA n ps
 esMayorA :: Int -> Int -> Bool
 esMayorA n1 n2 = n1 > n2
 
+edad :: Persona -> Int
+edad (ConsPersona _ e) = e
+
 -- ejercicio 3.1.b
 promedioEdad :: [Persona] -> Int
 -- PRECOND: la lista no es vacía
@@ -149,9 +152,15 @@ elMasViejo :: [Persona] -> Persona
 -- PRECOND: la lista no es vacía
 elMasViejo []       = error "Es una lista vacia"
 elMasViejo (p : []) = p
-elMasViejo (p : ps) = if esMayorQueLaOtra p (elMasViejo ps)
-                       then p
-                       else elMasViejo ps
+elMasViejo (p : ps) = laPersonaMasViejaEntre p (elMasViejo ps)
+
+laPersonaMasViejaEntre :: Persona -> Persona -> Persona
+laPersonaMasViejaEntre p1 p2 = if esMayorQueLaOtra p1 p2
+                                then p1
+                                else p2
+
+esMayorQueLaOtra :: Persona -> Persona -> Bool
+esMayorQueLaOtra p1 p2 = edad p1 > edad p2
 
 -- ejercicio 3.2
 data TipoDePokemon = Agua | Fuego | Planta
@@ -202,6 +211,15 @@ pokemonsDeTipo (p : ps) t = singularSi p (sonDelMismoTipo (tipoDelPokemon p) t) 
 superaATodos :: Pokemon -> [Pokemon] -> Bool
 superaATodos _  []        = True
 superaATodos p1 (p2 : ps) = (superaA p1 p2) && (superaATodos p1 ps)
+
+superaA :: Pokemon -> Pokemon -> Bool
+superaA p1 p2 = esMejorTipoQue (tipoDelPokemon p1) (tipoDelPokemon p2)
+
+esMejorTipoQue :: TipoDePokemon -> TipoDePokemon -> Bool
+esMejorTipoQue Agua   Fuego  = True
+esMejorTipoQue Fuego  Planta = True
+esMejorTipoQue Planta Agua   = True
+esMejorTipoQue _      _      = False
 
 -- ejercicio 3.2.d
 esMaestroPokemon :: Entrenador -> Bool
