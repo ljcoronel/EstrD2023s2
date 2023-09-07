@@ -229,4 +229,5 @@ simplificarProd e1        e2        = Prod e1 e2
 
 simplificarNeg :: ExpA -> ExpA
 -- PRECOND: la expresion aritmetica debe ser negacion
-simplificarNeg e = Neg (Neg e)
+simplificarNeg (Neg e) = e
+simplificarNeg e       = Neg e
