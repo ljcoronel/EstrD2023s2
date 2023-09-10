@@ -301,8 +301,8 @@ empleadosDeLaEmpresa :: Empresa -> [Rol]
 empleadosDeLaEmpresa (ConsEmpresa rs) = rs
 
 desarrolladoresSeniors :: [Rol] -> [Rol]
-desarrolladoresSeniors []        = []
-desarrolladoresSeniors (r : rs)  = singularSi r (esSenior (seniorityDelRol r) && esDeveloper r) ++ desarrolladoresSeniors rs
+desarrolladoresSeniors []       = []
+desarrolladoresSeniors (r : rs) = singularSi r (esSenior (seniorityDelRol r) && esDeveloper r) ++ desarrolladoresSeniors rs
 
 esDeveloper :: Rol -> Bool
 esDeveloper (Developer _ _) = True
@@ -317,29 +317,31 @@ esSenior Senior = True
 esSenior _      = False
 
 cantidadDeSeniorConProyectosEn :: [Rol] -> [Proyecto] -> Int
-cantidadDeSeniorConProyectosEn []        _  = 0
-cantidadDeSeniorConProyectosEn (r : rs)  ps = unoSi (hayProyectoConElMismoNombreEn (proyectoDelRol r) ps) + cantidadDeSeniorConProyectosEn rs ps
+cantidadDeSeniorConProyectosEn []       _  = 0
+cantidadDeSeniorConProyectosEn (r : rs) ps = unoSi (hayProyectoConElMismoNombreEn (proyectoDelRol r) ps) + cantidadDeSeniorConProyectosEn rs ps
 
 -- ejericio 3.3.c
 cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
 cantQueTrabajanEn ps e = cantidadDeRolesConProyectoEn (empleadosDeLaEmpresa e) ps
 
 cantidadDeRolesConProyectoEn :: [Rol] -> [Proyecto] -> Int
-cantidadDeRolesConProyectoEn []        _  = 0
-cantidadDeRolesConProyectoEn (r : rs)  ps = unoSi (hayProyectoConElMismoNombreEn (proyectoDelRol r) ps) + cantidadDeRolesConProyectoEn rs ps
+cantidadDeRolesConProyectoEn []       _  = 0
+cantidadDeRolesConProyectoEn (r : rs) ps = unoSi (hayProyectoConElMismoNombreEn (proyectoDelRol r) ps) + cantidadDeRolesConProyectoEn rs ps
 
 -- ejericio 3.3.d
-
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
 asignadosPorProyecto e = cantidadDeEmpleadosParaCadaProyecto (proyectos e) e
 
 cantidadDeEmpleadosParaCadaProyecto :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
 cantidadDeEmpleadosParaCadaProyecto []       _ = []
-cantidadDeEmpleadosParaCadaProyecto (p : ps) e = (p, cantidadDeEmpleadosEnProyecto p (empleadosDeLaEmpresa e)) : cantidadDeEmpleadosParaCadaProyecto ps e
+cantidadDeEmpleadosParaCadaProyecto (p : ps) e = (p, cantidadDeEmpleadosDeLosRoles (empleadosConProyectoEn (empleadosDeLaEmpresa e) p)) : cantidadDeEmpleadosParaCadaProyecto ps e
 
-cantidadDeEmpleadosEnProyecto :: Proyecto -> [Rol] -> Int
-cantidadDeEmpleadosEnProyecto _ []       = 0
-cantidadDeEmpleadosEnProyecto p (r : rs) = unoSi (esRolConProyecto r p) + cantidadDeEmpleadosEnProyecto p rs
+empleadosConProyectoEn :: [Rol] -> Proyecto -> [Rol]
+empleadosConProyectoEn []       _ = []
+empleadosConProyectoEn (r : rs) p = singularSi r (esRolConProyecto r p) ++ empleadosConProyectoEn rs p
+
+cantidadDeEmpleadosDeLosRoles :: [Rol] -> Int
+cantidadDeEmpleadosDeLosRoles rs = longitud rs
 
 esRolConProyecto :: Rol -> Proyecto -> Bool
 esRolConProyecto r p = tienenElMismoNombre (proyectoDelRol r) p
