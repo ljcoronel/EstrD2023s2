@@ -295,10 +295,10 @@ tienenElMismoNombre p1 p2 = nombreDelProyecto p1 == nombreDelProyecto p2
 
 -- ejercicio 3.3.b
 losDevSenior :: Empresa -> [Proyecto] -> Int
-losDevSenior e ps = cantidadDeSeniorConProyectosEn (desarrolladoresSeniors (desarrolladoresDeLaEmpresa e)) ps
+losDevSenior e ps = cantidadDeSeniorConProyectosEn (desarrolladoresSeniors (empleadosDeLaEmpresa e)) ps
 
-desarrolladoresDeLaEmpresa :: Empresa -> [Rol]
-desarrolladoresDeLaEmpresa (ConsEmpresa rs) = rs
+empleadosDeLaEmpresa :: Empresa -> [Rol]
+empleadosDeLaEmpresa (ConsEmpresa rs) = rs
 
 desarrolladoresSeniors :: [Rol] -> [Rol]
 desarrolladoresSeniors []        = []
@@ -322,7 +322,7 @@ cantidadDeSeniorConProyectosEn (r : rs)  ps = unoSi (hayProyectoConElMismoNombre
 
 -- ejericio 3.3.c
 cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
-cantQueTrabajanEn ps e = cantidadDeRolesConProyectoEn (desarrolladoresDeLaEmpresa e) ps
+cantQueTrabajanEn ps e = cantidadDeRolesConProyectoEn (empleadosDeLaEmpresa e) ps
 
 cantidadDeRolesConProyectoEn :: [Rol] -> [Proyecto] -> Int
 cantidadDeRolesConProyectoEn []        _  = 0
@@ -335,7 +335,7 @@ asignadosPorProyecto e = cantidadDeEmpleadosParaCadaProyecto (proyectos e) e
 
 cantidadDeEmpleadosParaCadaProyecto :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
 cantidadDeEmpleadosParaCadaProyecto []       _ = []
-cantidadDeEmpleadosParaCadaProyecto (p : ps) e = (p, cantidadDeEmpleadosEnProyecto p (desarrolladoresDeLaEmpresa e)) : cantidadDeEmpleadosParaCadaProyecto ps e
+cantidadDeEmpleadosParaCadaProyecto (p : ps) e = (p, cantidadDeEmpleadosEnProyecto p (empleadosDeLaEmpresa e)) : cantidadDeEmpleadosParaCadaProyecto ps e
 
 cantidadDeEmpleadosEnProyecto :: Proyecto -> [Rol] -> Int
 cantidadDeEmpleadosEnProyecto _ []       = 0
