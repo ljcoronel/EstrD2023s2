@@ -285,13 +285,13 @@ proyectosSinRepetir (p : ps) = singularSi p (not (hayProyectoConElMismoNombreEn 
 
 hayProyectoConElMismoNombreEn :: Proyecto -> [Proyecto] -> Bool
 hayProyectoConElMismoNombreEn _  []        = False
-hayProyectoConElMismoNombreEn p1 (p2 : ps) = tienenElMismoNombre p1 p2 || hayProyectoConElMismoNombreEn p1 ps
+hayProyectoConElMismoNombreEn p1 (p2 : ps) = sonElMismoProyecto p1 p2 || hayProyectoConElMismoNombreEn p1 ps
 
 nombreDelProyecto :: Proyecto -> [Char]
 nombreDelProyecto (ConsProyecto n) = n
 
-tienenElMismoNombre :: Proyecto -> Proyecto -> Bool
-tienenElMismoNombre p1 p2 = nombreDelProyecto p1 == nombreDelProyecto p2
+sonElMismoProyecto :: Proyecto -> Proyecto -> Bool
+sonElMismoProyecto p1 p2 = nombreDelProyecto p1 == nombreDelProyecto p2
 
 -- ejercicio 3.3.b
 losDevSenior :: Empresa -> [Proyecto] -> Int
@@ -330,18 +330,14 @@ cantidadDeRolesConProyectoEn (r : rs) ps = unoSi (hayProyectoConElMismoNombreEn 
 
 -- ejericio 3.3.d
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
-asignadosPorProyecto e = cantidadDeEmpleadosParaCadaProyecto (proyectos e) e
+asignadosPorProyecto e = cantDeEmpleadosParaCadaProyecto (empleadosDeLaEmpresa e)
 
-cantidadDeEmpleadosParaCadaProyecto :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
-cantidadDeEmpleadosParaCadaProyecto []       _ = []
-cantidadDeEmpleadosParaCadaProyecto (p : ps) e = (p, cantidadDeEmpleadosDeLosRoles (empleadosConProyectoEn (empleadosDeLaEmpresa e) p)) : cantidadDeEmpleadosParaCadaProyecto ps e
+cantDeEmpleadosParaCadaProyecto :: [Rol] -> [(Proyecto, Int)]
+cantDeEmpleadosParaCadaProyecto []       = []
+cantDeEmpleadosParaCadaProyecto (r : rs) = agregarProyectoDe r (cantDeEmpleadosParaCadaProyecto rs)
 
-empleadosConProyectoEn :: [Rol] -> Proyecto -> [Rol]
-empleadosConProyectoEn []       _ = []
-empleadosConProyectoEn (r : rs) p = singularSi r (esRolConProyecto r p) ++ empleadosConProyectoEn rs p
-
-cantidadDeEmpleadosDeLosRoles :: [Rol] -> Int
-cantidadDeEmpleadosDeLosRoles rs = longitud rs
-
-esRolConProyecto :: Rol -> Proyecto -> Bool
-esRolConProyecto r p = tienenElMismoNombre (proyectoDelRol r) p
+agregarProyectoDe :: Rol -> [(Proyecto, Int)] -> [(Proyecto, Int)]
+agregarProyectoDe r []             = (proyectoDelRol r, 1) : []
+agregarProyectoDe r ((p, n) : pns) = if sonElMismoProyecto (proyectoDelRol r) p
+                                      then (p, n+1) : pns
+                                      else (p, n) : agregarProyectoDe r pns
