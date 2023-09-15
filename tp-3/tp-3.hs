@@ -138,7 +138,17 @@ aparicionesT e (NodeT a t1 t2) = unoSi (a == e) + aparicionesT e t1 + aparicione
 -- ejericicio 2.1.6
 leaves :: Tree a -> [a]
 leaves EmptyT          = []
-leaves (NodeT a t1 t2) = a : leaves t1 ++ leaves t2
+leaves (NodeT a t1 t2) = agruparSiEsHoja (NodeT a t1 t2) (leaves t1 ++ leaves t2)
+
+agruparSiEsHoja :: Tree a -> [a] -> [a]
+agruparSiEsHoja (NodeT a t1 t2) hs = if sonVacias t1 t2
+                                      then a : hs
+                                      else hs
+agruparSiEsHoja _               hs = hs
+
+sonVacias :: Tree a -> Tree a -> Bool
+sonVacias EmptyT EmptyT = True
+sonVacias _      _      = False
 
 -- ejericicio 2.1.7
 heightT :: Tree a -> Int
