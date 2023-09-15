@@ -78,12 +78,12 @@ esCofreConTesoro _            = False
 
 -- ejercicio 1.2.d
 alMenosNTesoros :: Int -> Camino -> Bool
-alMenosNTesoros n c = cantidadDeTesorosDelCamino c >= n
-
-cantidadDeTesorosDelCamino :: Camino -> Int
-cantidadDeTesorosDelCamino Fin          = 0
-cantidadDeTesorosDelCamino (Cofre os c) = cantidadDeTesoros os + cantidadDeTesorosDelCamino c
-cantidadDeTesorosDelCamino (Nada c)     = cantidadDeTesorosDelCamino c
+alMenosNTesoros 0 _            = True
+alMenosNTesoros _ Fin          = False
+alMenosNTesoros n (Nada c)     = alMenosNTesoros n c
+alMenosNTesoros n (Cofre os c) = if cantidadDeTesoros os < n
+                                  then alMenosNTesoros (n - cantidadDeTesoros os) c
+                                  else alMenosNTesoros 0 c
 
 cantidadDeTesoros :: [Objeto] -> Int
 cantidadDeTesoros []       = 0
